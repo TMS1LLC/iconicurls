@@ -194,7 +194,7 @@
     .mode-dot { width:8px; height:8px; border-radius:50%; background:var(--teal); flex-shrink:0; }
     .mode-dot.pulse-dot { animation:dot-pulse 1.6s ease-in-out infinite; }
     @keyframes dot-pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.3;transform:scale(0.7);} }
-    .center-id { opacity:0.4; letter-spacing:0.2em; font-size:10px; }
+    .center-id { opacity:0.4; letter-spacing:0.2em; font-size:0.7vw; }
     .voice-zone { display:flex; align-items:center; gap:8px; cursor:pointer; }
     .voice-listening #voiceLabel { color:var(--teal); }
 
@@ -203,7 +203,7 @@
       position:fixed; bottom:62px; left:50%;
       transform:translateX(-50%) translateY(16px);
       background:rgba(10,11,9,0.96); border:1px solid var(--olive);
-      border-radius:6px; padding:14px 32px; font-size:17px;
+      border-radius:6px; padding:1vw 2vw; font-size:1.2vw;
       color:var(--cream); letter-spacing:0.1em;
       opacity:0; pointer-events:none;
       transition:opacity 0.25s, transform 0.25s;
@@ -219,12 +219,12 @@
       z-index:997; opacity:0; pointer-events:none; transition:opacity 0.4s;
     }
     .sugg-overlay.show { opacity:1; pointer-events:auto; }
-    .sugg-title { font-size:10px; letter-spacing:0.4em; color:var(--olive); text-transform:uppercase; }
-    .sugg-msg { font-family:'Space Grotesk',sans-serif; font-size:32px; font-weight:700; color:var(--cream); text-align:center; max-width:720px; line-height:1.3; }
-    .sugg-btns { display:flex; gap:16px; }
-    .sugg-btn { background:transparent; border:1px solid var(--olive); color:var(--cream); font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; padding:13px 32px; cursor:pointer; border-radius:3px; transition:background 0.2s; text-transform:uppercase; }
+    .sugg-title { font-size:0.7vw; letter-spacing:0.4em; color:var(--olive); text-transform:uppercase; }
+    .sugg-msg { font-family:'Space Grotesk',sans-serif; font-size:2.2vw; font-weight:700; color:var(--cream); text-align:center; max-width:60vw; line-height:1.3; }
+    .sugg-btns { display:flex; gap:1vw; }
+    .sugg-btn { background:transparent; border:1px solid var(--olive); color:var(--cream); font-family:'Space Mono',monospace; font-size:0.8vw; letter-spacing:0.2em; padding:0.9vw 2vw; cursor:pointer; border-radius:3px; transition:background 0.2s; text-transform:uppercase; }
     .sugg-btn.yes { background:var(--olive); }
-    .sugg-hint { font-size:10px; color:var(--olive); opacity:0.5; letter-spacing:0.25em; }
+    .sugg-hint { font-size:0.7vw; color:var(--olive); opacity:0.5; letter-spacing:0.25em; }
 
     /* Info ticket fade cycle */
     #infoTicket { transition: none; }
@@ -356,7 +356,7 @@
           </svg>
           <span class="ig-handle">@iconicurlkeesha</span>
         </div>
-        <div id="contactPhone" class="ticket-value" style="display:none;font-size:16px;color:var(--teal);font-family:'Space Grotesk',sans-serif;">(973) 986-1752</div>
+        <div id="contactPhone" class="ticket-value" style="display:none;color:var(--teal);font-family:'Space Grotesk',sans-serif;">(973) 986-1752</div>
       </div>
       <div class="ticket qr-ticket" id="bookTicket">
         <div class="ticket-label">BOOK</div>
@@ -364,7 +364,7 @@
           <div id="qrcode"></div>
         </div>
         <div id="bookURL" style="display:none;">
-          <div style="font-size:9px;color:var(--teal);letter-spacing:0.06em;font-family:'Space Grotesk',sans-serif;white-space:nowrap;text-align:center;">ICONICURLS.GLOSSGENIUS.COM</div>
+          <div style="color:var(--teal);letter-spacing:0.06em;font-family:'Space Grotesk',sans-serif;white-space:nowrap;text-align:center;">ICONICURLS.GLOSSGENIUS.COM</div>
         </div>
       </div>
     </div>
@@ -832,17 +832,17 @@
         if (state === 0) {
           label.textContent = '\u00a0';
           value.textContent = getTimeStr();
-          value.style.fontSize = '26px';
+          value.style.fontSize = '';
           sub.textContent = '\u00a0';
         } else if (state === 1) {
           label.textContent = '\u00a0';
           value.textContent = getDateStr();
-          value.style.fontSize = '22px';
+          value.style.fontSize = '';
           sub.textContent = '\u00a0';
         } else {
           label.textContent = 'PARAMUS, NJ';
           value.textContent = weatherTemp !== null ? `${weatherTemp}°` : '---';
-          value.style.fontSize = '26px';
+          value.style.fontSize = '';
           sub.textContent = weatherDesc || 'LOADING';
         }
       }
