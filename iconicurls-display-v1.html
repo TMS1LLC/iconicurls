@@ -76,13 +76,13 @@
     .main {
       display:flex; flex-direction:column;
       align-items:center; justify-content:center;
-      gap:36px; padding:20px 40px 10px;
+      gap:2.5vh; padding:1.5vh 3vw 0.8vh;
     }
 
     /* ─── WORDMARK HERO ──────────────────────────────────────────── */
     .logo-zone {
       display:flex; flex-direction:column;
-      align-items:center; gap:10px;
+      align-items:center; gap:0.8vh;
     }
 
     .wordmark-wrap {
@@ -102,7 +102,7 @@
     /* Flag canvas — painted with flag stripe colors, clipped to wordmark shape */
     #flagCanvas {
       position:absolute; top:0; left:0;
-      height:140px; width:auto;
+      height:18vh; width:auto;
       display:none; pointer-events:none;
     }
     body.mode-flags #flagCanvas   { display:block; }
@@ -111,7 +111,7 @@
     #wordmarkFallback {
       display:none;
       font-family:'Space Grotesk',sans-serif;
-      font-size:80px; font-weight:300;
+      font-size:7vw; font-weight:300;
       letter-spacing:0.12em; color:var(--teal);
     }
 
@@ -183,20 +183,21 @@
     .qr-wrap {
       position:absolute; top:50%; left:0; right:0;
       transform:translateY(-56%);
-      display:flex; flex-direction:column; align-items:center; gap:4px;
+      display:flex; flex-direction:column; align-items:center; gap:0.3vw;
     }
     #qrcode canvas, #qrcode img {
       border-radius:3px; display:block;
     }
     .qr-url {
-      font-size:8px; color:var(--olive); letter-spacing:0.06em;
-      text-transform:uppercase; text-align:center;
-      white-space:nowrap;
+      display:none; /* subscript removed per design */
     }
-    /* URL alternate view — centered */
+    /* URL alternate view — centered, fits within 14vw ticket */
     #bookURL {
-      position:absolute; top:50%; left:8px; right:8px;
+      position:absolute; top:50%; left:2%; right:2%;
       transform:translateY(-50%);
+      font-size:0.85vw; font-weight:700; letter-spacing:0.03em;
+      color:var(--teal); text-align:center; white-space:nowrap;
+      overflow:hidden;
     }
 
     /* ─── STATUS BAR ─────────────────────────────────────────────── */
@@ -379,9 +380,7 @@
         <div id="bookQR" class="qr-wrap">
           <div id="qrcode"></div>
         </div>
-        <div id="bookURL" style="display:none;">
-          <div style="color:var(--teal);letter-spacing:0.06em;font-family:'Space Grotesk',sans-serif;white-space:nowrap;text-align:center;">ICONICURLS.GLOSSGENIUS.COM</div>
-        </div>
+        <div id="bookURL" style="display:none;font-family:'Space Grotesk',sans-serif;">ICONICURLS.GLOSSGENIUS.COM</div>
       </div>
     </div>
   </main>
