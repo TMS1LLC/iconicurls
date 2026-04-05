@@ -21,6 +21,22 @@
 
     * { margin:0; padding:0; box-sizing:border-box; }
 
+    /* TV COLOR BOOST — auto-applied on large screens (TVs) */
+    @media screen and (min-width: 1200px) {
+      :root {
+        --teal:  #7dd6c4;   /* brighter, more saturated */
+        --olive: #9aaa8a;
+        --cream: #fff8ee;
+      }
+      body {
+        filter: saturate(1.3) contrast(1.08);
+      }
+      .wordmark-img {
+        filter: brightness(0) saturate(100%) invert(79%) sepia(19%)
+                saturate(600%) hue-rotate(119deg) brightness(110%) contrast(95%);
+      }
+    }
+
     html, body {
       width:100%; height:100%;
     }
