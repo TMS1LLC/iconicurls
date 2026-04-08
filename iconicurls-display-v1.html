@@ -17,6 +17,7 @@
       --dark:   #0a0b09;
       --mid:    #13150f;
       --border: #2a2f25;
+      --gold:   #FFD700;
     }
 
     * { margin:0; padding:0; box-sizing:border-box; }
@@ -24,7 +25,7 @@
     /* TV COLOR BOOST — auto-applied on large screens (TVs) */
     @media screen and (min-width: 1200px) {
       :root {
-        --teal:  #7dd6c4;   /* brighter, more saturated */
+        --teal:  #7dd6c4;
         --olive: #9aaa8a;
         --cream: #fff8ee;
       }
@@ -46,7 +47,7 @@
       font-family: 'Space Mono', 'Courier New', monospace;
       overflow:hidden;
       display:grid;
-      grid-template-rows: 3vw 1fr 3vw;
+      grid-template-rows: 2.4vw 1fr 2.4vw;
       user-select:none;
     }
 
@@ -65,12 +66,21 @@
     }
     .ticker-inner {
       display:inline-block; white-space:nowrap;
-      animation:ticker 100s linear infinite;
       font-family:'Space Grotesk', sans-serif;
-      font-size:1.1vw; font-weight:700;
+      font-size:0.92vw; font-weight:700;
       color:var(--cream); letter-spacing:0.14em;
     }
+
+    /* Default ticker scroll */
+    .ticker-inner.ticker-scroll {
+      animation: ticker 190s linear infinite;
+    }
     @keyframes ticker { from{transform:translateX(100vw);} to{transform:translateX(-100%);} }
+
+    /* Special segment: gold color */
+    .ticker-special {
+      color: var(--gold) !important;
+    }
 
     /* ─── MAIN ───────────────────────────────────────────────────── */
     .main {
@@ -99,7 +109,7 @@
       filter: brightness(0) saturate(100%) invert(79%) sepia(19%) saturate(421%) hue-rotate(119deg) brightness(98%) contrast(87%);
     }
 
-    /* Flag canvas — painted with flag stripe colors, clipped to wordmark shape */
+    /* Flag canvas */
     #flagCanvas {
       position:absolute; top:0; left:0;
       height:18vh; width:auto;
@@ -108,11 +118,23 @@
     body.mode-flags #flagCanvas   { display:block; }
     body.mode-flags .wordmark-img { visibility:hidden; }
 
+    /* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+       BRAND LOCK — DO NOT CHANGE
+       The wordmark is iconicurl_logo_solo.png — a custom serif logo
+       with a curl flourish on the lowercase L. This is KG's brand
+       identity. The fallback text below is EMERGENCY ONLY and must
+       never be styled to look like a substitute for the real logo.
+       The image src below points to the absolute GitHub Pages URL
+       so it loads regardless of local file structure.
+       NEVER replace this image. NEVER change the src path.
+       NEVER restyle #wordmarkFallback to look intentional.
+    !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! */
     #wordmarkFallback {
       display:none;
       font-family:'Space Grotesk',sans-serif;
       font-size:7vw; font-weight:300;
       letter-spacing:0.12em; color:var(--teal);
+      /* EMERGENCY FALLBACK ONLY — not a brand font */
     }
 
     .tagline {
@@ -120,7 +142,6 @@
       color:var(--olive); text-transform:uppercase;
     }
 
-    /* Country label — shows which flag is active */
     .flag-country-label {
       font-size:0.9vw; letter-spacing:0.35em;
       color:var(--teal); text-transform:uppercase;
@@ -132,7 +153,6 @@
     /* ─── PANELS ─────────────────────────────────────────────────── */
     .panels { display:flex; gap:1.5vw; }
 
-    /* All boxes: identical fixed size, never shift */
     .ticket {
       background:var(--mid);
       border:1px solid var(--border);
@@ -147,7 +167,6 @@
       background:var(--teal); opacity:0.4;
     }
 
-    /* Fixed zones: label top, value center, sub bottom — never move */
     .ticket-label {
       position:absolute; top:8%; left:0; right:0;
       font-size:0.6vw; letter-spacing:0.25em;
@@ -169,7 +188,29 @@
       white-space:nowrap;
     }
 
-    /* Instagram ticket — value zone holds the ig-row */
+    /* Box 1 — service value: two lines max, dynamic sizing via JS */
+    #panelVibe {
+      font-size:1.05vw;
+      line-height:1.25;
+      white-space:normal;
+      word-break:break-word;
+      padding:0 8%;
+      max-height:6vh;
+      overflow:hidden;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+    #panelSub {
+      font-size:0.58vw;
+      color:var(--olive);
+      letter-spacing:0.1em;
+      white-space:normal;
+      padding:0 6%;
+    }
+
+    /* Instagram ticket */
     .ig-row {
       position:absolute; top:50%; left:4%; right:4%;
       transform:translateY(-50%);
@@ -178,8 +219,7 @@
     .ig-icon { color:var(--teal); flex-shrink:0; width:1.4vw; height:1.4vw; }
     .ig-handle { font-size:1.1vw; color:var(--teal); letter-spacing:0.03em; font-weight:700; font-family:'Space Grotesk',sans-serif; white-space:nowrap; }
 
-    /* QR code ticket — center the QR, pin URL to bottom */
-    .qr-ticket { }
+    /* QR code ticket */
     .qr-wrap {
       position:absolute; top:50%; left:0; right:0;
       transform:translateY(-56%);
@@ -188,16 +228,37 @@
     #qrcode canvas, #qrcode img {
       border-radius:3px; display:block;
     }
-    .qr-url {
-      display:none; /* subscript removed per design */
-    }
-    /* URL alternate view — centered, fits within 14vw ticket */
+    .qr-url { display:none; }
+
     #bookURL {
       position:absolute; top:50%; left:2%; right:2%;
       transform:translateY(-50%);
-      font-size:0.85vw; font-weight:700; letter-spacing:0.03em;
-      color:var(--teal); text-align:center; white-space:nowrap;
+      font-size:0.72vw; font-weight:700; letter-spacing:0.03em;
+      color:var(--teal); text-align:center;
+      line-height:1.6;
       overflow:hidden;
+    }
+
+    /* Hours display in book box */
+    #bookHours {
+      position:absolute; top:50%; left:4%; right:4%;
+      transform:translateY(-50%);
+      font-size:0.72vw; font-weight:700; letter-spacing:0.04em;
+      color:var(--cream); text-align:center;
+      line-height:1.7;
+      font-family:'Space Grotesk',sans-serif;
+      display:none;
+    }
+
+    /* Credential display in contact box */
+    #contactCreds {
+      position:absolute; top:50%; left:4%; right:4%;
+      transform:translateY(-50%);
+      font-size:0.72vw; font-weight:700; letter-spacing:0.05em;
+      color:var(--teal); text-align:center;
+      line-height:1.8;
+      font-family:'Space Grotesk',sans-serif;
+      display:none;
     }
 
     /* ─── STATUS BAR ─────────────────────────────────────────────── */
@@ -252,18 +313,22 @@
     #infoTicket.fading #infoSub,
     #infoTicket.fading #infoLabel { opacity: 0; }
 
+    /* Box 1 fade */
+    #vibeTicket.fading #panelVibe,
+    #vibeTicket.fading #panelLabel,
+    #vibeTicket.fading #panelSub { opacity: 0; }
+    #panelVibe, #panelLabel, #panelSub { transition: opacity 0.4s ease; }
+
     /* split-flap */
     .flap-char { display:inline-block; animation:flap 0.08s ease-in-out; }
     @keyframes flap { 0%{transform:rotateX(90deg);opacity:0;} 100%{transform:rotateX(0);opacity:1;} }
 
     /* ═══ WORDMARK ANIMATION MODES ═══════════════════════════════ */
 
-    /* GHOST — ethereal fade in/out */
     body.mode-ghost .wordmark-wrap { animation:ghost-breathe 2s ease-in-out infinite; }
     body.mode-ghost .wordmark-img  { filter: brightness(0) invert(1); opacity:0.25; }
     @keyframes ghost-breathe { 0%,100%{opacity:0.15;} 50%{opacity:1;} }
 
-    /* INVERT — flip teal to dark on light */
     body.mode-invert { background:var(--teal) !important; }
     body.mode-invert .wordmark-img { filter:brightness(0) invert(0); }
     body.mode-invert .ticker-wrap  { background:var(--dteal); }
@@ -273,7 +338,6 @@
     body.mode-invert .ticket-value { color:var(--dark); }
     body.mode-invert .ticket-label, body.mode-invert .ticket-sub { color:rgba(0,0,0,0.5); }
 
-    /* SHAKE */
     body.mode-glitch .wordmark-wrap { animation:logo-shake 0.12s steps(2) infinite; }
     @keyframes logo-shake {
       0%  { transform:translate(0,0);      filter:hue-rotate(0deg)   saturate(1); }
@@ -284,7 +348,6 @@
       100%{ transform:translate(0,0);      filter:hue-rotate(0deg)   saturate(1); }
     }
 
-    /* BOUNCE */
     body.mode-bounce .wordmark-wrap { animation:logo-bounce 0.65s cubic-bezier(0.36,0.07,0.19,0.97) infinite; }
     @keyframes logo-bounce {
       0%,100%{ transform:translateY(0) scale(1); }
@@ -293,7 +356,6 @@
       80%    { transform:translateY(4px) scaleX(1.04) scaleY(0.96); }
     }
 
-    /* ELECTRIC — bright flicker */
     body.mode-electric .wordmark-wrap { animation:electric-flicker 0.1s steps(1) infinite; }
     body.mode-electric .wordmark-img  { filter:brightness(0) invert(1); }
     @keyframes electric-flicker {
@@ -302,19 +364,16 @@
       77%,100%{ opacity:1;   filter:drop-shadow(0 0 24px var(--teal)) drop-shadow(0 0 70px rgba(163,198,186,0.8)); }
     }
 
-    /* PULSE GLOW */
     body.mode-pulse .wordmark-wrap { animation:logo-pulse 1.2s ease-in-out infinite alternate; }
     @keyframes logo-pulse {
       from { filter:drop-shadow(0 0 8px var(--teal)); }
       to   { filter:drop-shadow(0 0 32px var(--teal)) drop-shadow(0 0 80px rgba(163,198,186,0.5)); }
     }
 
-    /* FLIP — upside down */
     body.mode-flip .wordmark-wrap      { animation:logo-flip 1s cubic-bezier(0.4,0,0.2,1) forwards; }
     body.mode-flip-held .wordmark-wrap { transform:rotate(180deg); }
     @keyframes logo-flip { 0%{transform:rotate(0);} 100%{transform:rotate(180deg);} }
 
-    /* CHROME — metallic shimmer */
     body.mode-chrome .wordmark-wrap { animation:chrome-shimmer 2s ease-in-out infinite alternate; }
     body.mode-chrome .wordmark-img  {
       filter: brightness(0) saturate(0) invert(1) brightness(0.85) contrast(1.2);
@@ -330,8 +389,8 @@
 
   <!-- ─── TICKER ────────────────────────────────────────── -->
   <div class="ticker-wrap">
-    <div class="ticker-inner">
-      @ICONICURLKEESHA &nbsp;·&nbsp; MAKING CURLS EASY WITH PERSONALIZED PROFESSIONAL CARE &nbsp;·&nbsp; FOLLOW US ON INSTAGRAM @ICONICURLKEESHA &nbsp;·&nbsp; BOOK NOW AT ICONICURLS.GLOSSGENIUS.COM &nbsp;·&nbsp; CURLY · NATURAL · ICONIC &nbsp;·&nbsp; 393 RTE 17, PARAMUS, NJ &nbsp;·&nbsp; (973) 986-1752 &nbsp;·&nbsp; CURLS@ICONICURL.COM &nbsp;·&nbsp; @ICONICURLKEESHA &nbsp;·&nbsp; MAKING CURLS EASY WITH PERSONALIZED PROFESSIONAL CARE &nbsp;·&nbsp; FOLLOW US ON INSTAGRAM @ICONICURLKEESHA &nbsp;·&nbsp; BOOK NOW AT ICONICURLS.GLOSSGENIUS.COM &nbsp;·&nbsp;
+    <div class="ticker-inner ticker-scroll" id="tickerInner">
+      @ICONICURLKEESHA &nbsp;·&nbsp; MAKING CURLS EASY WITH PERSONALIZED PROFESSIONAL CARE &nbsp;·&nbsp; FOLLOW US ON INSTAGRAM @ICONICURLKEESHA &nbsp;·&nbsp; BOOK NOW AT ICONICURLS.GLOSSGENIUS.COM &nbsp;·&nbsp; CURLY · NATURAL · ICONIC &nbsp;·&nbsp; 393 RTE 17, PARAMUS, NJ &nbsp;·&nbsp; (973) 986-1752 &nbsp;·&nbsp; CURLS@ICONICURL.COM &nbsp;·&nbsp; THE CURL CUT · HYDRATING DEEP TREATMENT · HIGHLIGHTS & BALAYAGE · KERATIN TREATMENT · SILK PRESS · COLOR SERVICE &nbsp;·&nbsp; KIDS CURL CUT · CURL-STRENGTHENING TREATMENT · BOTANICAL HAIR GLOSS · FASHION COLOR TRANSFORMATION · STYLING WORKSHOP · MOISTURE-RICH HAIR MASK &nbsp;·&nbsp; CURL CUTS · COLOR · KERATIN · TREATMENTS · STYLING · EXTENSIONS &nbsp;·&nbsp; OUIDAD EDUCATOR · MASTER GOLDWELL COLORIST · CURL EDUCATOR &nbsp;·&nbsp; AMMONIA-FREE · PEROXIDE-FREE · GOLDWELL ELUMEN COLOR &nbsp;·&nbsp; LICENSED IN NEW YORK · NEW JERSEY · NORTH CAROLINA · FLORIDA &nbsp;·&nbsp; INQUIRE ABOUT WEDDING PACKAGES — LOCAL & DESTINATION &nbsp;·&nbsp; ASK ABOUT SUNDAYS IN THE CITY — ALTERNATE SERVICE LOCATION &nbsp;·&nbsp; <span class="ticker-special">CURLY HAIR SPECIALIST &nbsp;✦&nbsp; MIXED-TEXTURE EXPERT &nbsp;✦&nbsp; CHILD FRIENDLY</span> &nbsp;·&nbsp; @ICONICURLKEESHA &nbsp;·&nbsp; MAKING CURLS EASY WITH PERSONALIZED PROFESSIONAL CARE &nbsp;·&nbsp; FOLLOW US ON INSTAGRAM @ICONICURLKEESHA &nbsp;·&nbsp; BOOK NOW AT ICONICURLS.GLOSSGENIUS.COM &nbsp;·&nbsp;
     </div>
   </div>
 
@@ -341,8 +400,9 @@
     <!-- WORDMARK HERO -->
     <div class="logo-zone">
       <div class="wordmark-wrap" id="wordmarkWrap">
+        <!-- BRAND LOCK: src must always be this absolute URL. DO NOT change to relative path or swap this image. This is KG's custom serif logo with curl flourish — the Iconicurls brand identity. NEVER CHANGE. -->
         <img class="wordmark-img" id="wordmarkImg"
-          src="iconicurl_logo_solo.png"
+          src="https://tms1llc.github.io/iconicurls/iconicurl_logo_solo.png"
           alt="iconicurl"
           onerror="this.style.display='none';document.getElementById('wordmarkFallback').style.display='block'"/>
         <canvas id="flagCanvas"></canvas>
@@ -354,15 +414,21 @@
 
     <!-- PANELS -->
     <div class="panels">
-      <div class="ticket">
-        <div class="ticket-label">TODAY'S LOOK IS</div>
+      <!-- BOX 1: TODAY'S LOOK / SERVICE CALLOUT -->
+      <div class="ticket" id="vibeTicket">
+        <div class="ticket-label" id="panelLabel">TODAY'S LOOK IS</div>
         <div class="ticket-value" id="panelVibe">ICONIC</div>
+        <div class="ticket-sub" id="panelSub">&nbsp;</div>
       </div>
+
+      <!-- BOX 2: TIME / DATE / WEATHER -->
       <div class="ticket" id="infoTicket">
         <div class="ticket-label" id="infoLabel">&nbsp;</div>
         <div class="ticket-value large" id="infoValue">12:00 PM</div>
         <div class="ticket-sub" id="infoSub">&nbsp;</div>
       </div>
+
+      <!-- BOX 3: INSTAGRAM / PHONE / CREDENTIALS -->
       <div class="ticket" id="contactTicket">
         <div class="ticket-label" id="contactLabel">&nbsp;</div>
         <div id="contactInsta" class="ig-row">
@@ -374,13 +440,21 @@
           <span class="ig-handle">@iconicurlkeesha</span>
         </div>
         <div id="contactPhone" class="ticket-value" style="display:none;color:var(--teal);font-family:'Space Grotesk',sans-serif;">(973) 986-1752</div>
+        <div id="contactCreds">OUIDAD EDUCATOR<br>MASTER GOLDWELL COLORIST<br>LICENSED · NY · NJ · NC · FL</div>
       </div>
+
+      <!-- BOX 4: QR CODE / BOOKING URL / HOURS
+           MAINTENANCE NOTE: GlossGenius has no public API.
+           Hours below must be manually updated when KG changes her schedule.
+           Source of truth: iconicurls.glossgenius.com → Settings → Business Hours
+           Current hours as of 2025: Mon–Wed 9–7, Thu 9–8:30, Fri 9–9, Sat 8–6, Sun Closed -->
       <div class="ticket qr-ticket" id="bookTicket">
-        <div class="ticket-label">BOOK</div>
+        <div class="ticket-label" id="bookLabel">SCAN TO BOOK</div>
         <div id="bookQR" class="qr-wrap">
           <div id="qrcode"></div>
         </div>
-        <div id="bookURL" style="display:none;font-family:'Space Grotesk',sans-serif;">ICONICURLS.GLOSSGENIUS.COM</div>
+        <div id="bookURL" style="display:none;font-family:'Space Grotesk',sans-serif;">ICONICURLS<br>.GLOSSGENIUS.COM</div>
+        <div id="bookHours">MON–WED &nbsp;9AM–7PM<br>THU &nbsp;9AM–8:30PM<br>FRI &nbsp;9AM–9PM<br>SAT &nbsp;8AM–6PM<br>SUN CLOSED</div>
       </div>
     </div>
   </main>
@@ -413,14 +487,8 @@
 
   <script>
 
-    /* ── COUNTRIES ──────────────────────────────────────────────────
-       Weighted for Paramus, NJ clientele.
-       High-frequency entries appear 3–4× per cycle.
-       Broader Americas/Caribbean appear 1–2×.
-       Rest of world minimal.
-    ────────────────────────────────────────────────────────────────*/
+    /* ── COUNTRIES ─────────────────────────────────────────────────── */
     const COUNTRIES = [
-      // ★★★ HEAVY ROTATION — appear 4× ★★★
       {code:'JM',name:'JAMAICA'},
       {code:'CO',name:'COLOMBIA'},
       {code:'MX',name:'MEXICO'},
@@ -429,8 +497,6 @@
       {code:'TT',name:'TRINIDAD & TOBAGO'},
       {code:'DO',name:'DOMINICAN REP.'},
       {code:'HT',name:'HAITI'},
-
-      // ★★ MEDIUM ROTATION — appear 2–3× ★★
       {code:'CA',name:'CANADA'},
       {code:'BB',name:'BARBADOS'},
       {code:'GD',name:'GRENADA'},
@@ -452,8 +518,6 @@
       {code:'HN',name:'HONDURAS'},
       {code:'SV',name:'EL SALVADOR'},
       {code:'NI',name:'NICARAGUA'},
-
-      // Second pass — heavy hitters repeat
       {code:'JM',name:'JAMAICA'},
       {code:'CO',name:'COLOMBIA'},
       {code:'MX',name:'MEXICO'},
@@ -465,8 +529,6 @@
       {code:'CA',name:'CANADA'},
       {code:'BB',name:'BARBADOS'},
       {code:'GD',name:'GRENADA'},
-
-      // ★ OCCASIONAL — rest of world, one pass ★
       {code:'NG',name:'NIGERIA'},
       {code:'GH',name:'GHANA'},
       {code:'KE',name:'KENYA'},
@@ -487,8 +549,6 @@
       {code:'UY',name:'URUGUAY'},
       {code:'PY',name:'PARAGUAY'},
       {code:'BO',name:'BOLIVIA'},
-
-      // Third pass — top tier again
       {code:'JM',name:'JAMAICA'},
       {code:'CO',name:'COLOMBIA'},
       {code:'MX',name:'MEXICO'},
@@ -500,266 +560,115 @@
       {code:'CA',name:'CANADA'},
       {code:'LC',name:'ST. LUCIA'},
       {code:'BB',name:'BARBADOS'},
-
-      // Pride — once per cycle
       {code:'PRIDE',name:'PRIDE · WE WELCOME EVERYONE'},
     ];
 
-    /* ── FLAG COLOR DATA ────────────────────────────────────────────
-       [colors[], angle]
-       angle: 90 = left→right vertical stripes
-              180 = top→bottom horizontal stripes
-              135 = diagonal (bottom-left to top-right)
-    ────────────────────────────────────────────────────────────────*/
+    /* ── FLAG COLOR DATA ──────────────────────────────────────────── */
     const FC = {
-      AF:[['#000','#D32011','#007A36'],90],
-      AL:[['#E41E20','#111'],90],
-      DZ:[['#006233','#fff'],90],
-      AD:[['#003DA5','#FEDF00','#C60B1E'],90],
-      AO:[['#CC0000','#000'],180],
-      AG:[['#000','#0072C6','#fff','#FCD116'],90],
-      AR:[['#74ACDF','#fff','#74ACDF'],180],
-      AM:[['#D90012','#0033A0','#F2A800'],180],
-      AU:[['#00008B','#CC0000','#fff'],90],
-      AT:[['#ED2939','#fff','#ED2939'],180],
-      AZ:[['#0092BC','#ED2939','#3DB14B'],180],
-      BS:[['#00778B','#000','#FFC72C'],135],
-      BH:[['#CC0000','#fff'],90],
-      BD:[['#006A4E','#F42A41'],90],
-      BB:[['#00267F','#FFC726','#00267F'],90],
-      BY:[['#CF101A','#009A00','#fff'],90],
-      BE:[['#000','#FDDA24','#EF3340'],90],
-      BZ:[['#003F87','#fff','#CE1126'],90],
-      BJ:[['#008751','#FCD116','#DE2910'],90],
-      BT:[['#FF8000','#FF0000'],135],
-      BO:[['#D52B1E','#F4E400','#007A33'],180],
-      BA:[['#002395','#FFCE00'],135],
-      BW:[['#75AADB','#000','#fff'],180],
-      BR:[['#009C3B','#FEDF00','#002776'],90],
-      BN:[['#F7E017','#fff','#000'],135],
-      BG:[['#fff','#00966E','#D62612'],180],
-      BF:[['#EF2B2D','#009A00','#FCD116'],180],
-      BI:[['#CE1126','#1EB53A','#fff'],135],
-      CV:[['#003893','#fff','#CF2027'],180],
-      KH:[['#032EA1','#E00025','#032EA1'],90],
-      CM:[['#007A5E','#CE1126','#FCD116'],90],
-      CA:[['#FF0000','#fff','#FF0000'],90],
-      CF:[['#003082','#009A00','#FFCB00','#FF0000'],90],
-      TD:[['#002664','#FECB00','#C60C30'],90],
-      CL:[['#D52B1E','#fff','#0032A0'],180],
-      CN:[['#DE2910','#FFDE00'],90],
-      CO:[['#FCD116','#003087','#CE1126'],180],
-      KM:[['#3A75C4','#fff','#FFC61E','#3D8948'],90],
-      CG:[['#009543','#FBDE4A','#DC241F'],135],
-      CD:[['#007FFF','#F7D618','#CE1021'],135],
-      CR:[['#002B7F','#fff','#CF142B','#fff','#002B7F'],180],
-      HR:[['#FF0000','#fff','#171796'],180],
-      CU:[['#002A8F','#fff','#CF142B'],180],
-      CY:[['#fff','#D47600'],90],
-      CZ:[['#11457E','#fff','#D7141A'],180],
-      DK:[['#C60C30','#fff'],90],
-      DJ:[['#6AB2E7','#12AD2B','#D7141A'],135],
-      DM:[['#006B3F','#000','#FDD000'],90],
-      DO:[['#002D62','#CF142B','#fff'],90],
-      EC:[['#FFD100','#003087','#CE1126'],180],
-      EG:[['#CE1126','#fff','#000'],180],
-      SV:[['#0F47AF','#fff','#0F47AF'],180],
-      GQ:[['#3E9A00','#fff','#E32118'],180],
-      ER:[['#4DAA4D','#4189DD','#D22027'],135],
-      EE:[['#0072CE','#000','#fff'],180],
-      SZ:[['#3E5EB9','#FFD900','#B10C0C'],180],
-      ET:[['#078930','#FCDD09','#DA121A'],180],
-      FJ:[['#68BFE5','#003087','#CF142B'],90],
-      FI:[['#fff','#003580'],90],
-      FR:[['#002395','#fff','#ED2939'],90],
-      GA:[['#009e60','#FCD116','#3A75C4'],180],
-      GM:[['#3A7728','#fff','#CE1126','#3D58A7'],180],
-      GE:[['#fff','#DA0000'],90],
-      DE:[['#000','#DE0000','#FFCE00'],180],
-      GH:[['#CE1126','#FCD116','#006B3F'],180],
-      GR:[['#0D5EAF','#fff'],180],
-      GD:[['#CE1126','#FCD116','#009E60'],90],
-      GT:[['#4997D0','#fff','#4997D0'],90],
-      GN:[['#CE1126','#FCD116','#009460'],90],
-      GW:[['#CE1126','#FCD116','#009E49'],90],
-      GY:[['#009E60','#FCD116','#CE1126'],135],
-      HT:[['#00209F','#D21034'],180],
-      HN:[['#0073CF','#fff','#0073CF'],180],
-      HU:[['#CE2939','#fff','#477050'],180],
-      IS:[['#003897','#fff','#DC143C'],90],
-      IN:[['#FF9933','#fff','#138808'],180],
-      ID:[['#CE1126','#fff'],180],
-      IR:[['#239F40','#fff','#DA0000'],180],
-      IQ:[['#CE1126','#fff','#000'],180],
-      IE:[['#169B62','#fff','#FF883E'],90],
-      IL:[['#fff','#0038B8','#fff'],180],
-      IT:[['#009246','#fff','#CE2B37'],90],
-      JM:[['#3a3a3a','#FED100','#009B3A'],135],
-      JP:[['#fff','#BC002D'],90],
-      JO:[['#007A3D','#fff','#000','#CE1126'],180],
-      KZ:[['#00AFCA','#FAE042'],90],
-      KE:[['#000','#CC0001','#006600'],180],
-      KI:[['#CE1126','#003087','#FCD116'],180],
-      KW:[['#007A3D','#fff','#CE1126','#000'],90],
-      KG:[['#E8112D','#FFD700'],90],
-      LA:[['#CE1126','#002868','#CE1126'],180],
-      LV:[['#9E3039','#fff','#9E3039'],180],
-      LB:[['#fff','#CC2529','#fff'],180],
-      LS:[['#009543','#fff','#003087'],90],
-      LR:[['#BF0A30','#fff','#002868'],180],
-      LY:[['#000','#fff','#239E46'],180],
-      LI:[['#002B7F','#CE1126'],180],
-      LT:[['#FDB913','#006A44','#C1272D'],180],
-      LU:[['#EF3340','#fff','#00A3E0'],180],
-      MG:[['#fff','#FC3D32','#007E3A'],90],
-      MW:[['#000','#CE1126','#339E35'],180],
-      MY:[['#CC0001','#fff','#010088'],180],
-      MV:[['#D21034','#007E3A','#D21034'],90],
-      ML:[['#14B53A','#FCD116','#CE1126'],90],
-      MT:[['#fff','#CF142B'],90],
-      MH:[['#003087','#fff','#E4001B'],135],
-      MR:[['#006233','#D4AF37'],180],
-      MU:[['#EA2839','#1A206D','#FFD500','#00A551'],180],
-      MX:[['#006847','#fff','#CE1126'],90],
-      FM:[['#75AADB','#fff'],90],
-      MD:[['#003DA5','#FFD200','#CC0001'],90],
-      MC:[['#CE1126','#fff'],180],
-      MN:[['#C4272F','#015197','#C4272F'],90],
-      ME:[['#D4AF37','#CC0001','#D4AF37'],90],
-      MA:[['#C1272D','#006233'],90],
-      MZ:[['#009A44','#FCE100','#000','#D21034'],135],
-      MM:[['#FECB00','#34B233','#EA2839'],180],
-      NA:[['#009BDE','#009A44','#EF7D00'],135],
-      NR:[['#002B7F','#FFC61E'],180],
-      NP:[['#003893','#DC143C','#fff'],90],
-      NL:[['#AE1C28','#fff','#21468B'],180],
-      NZ:[['#00247D','#CC142B','#fff'],90],
-      NI:[['#fff','#3D6EAA','#fff'],180],
-      NE:[['#E05206','#fff','#0DB02B'],180],
-      NG:[['#008751','#fff','#008751'],90],
-      KP:[['#024FA2','#fff','#BE0000'],180],
-      MK:[['#CE2028','#F7E600'],90],
-      NO:[['#EF2B2D','#fff','#002868'],90],
-      OM:[['#DB161B','#fff','#008000'],90],
-      PK:[['#01411C','#fff'],90],
-      PW:[['#4AADD6','#FFDE00'],90],
-      PA:[['#fff','#005293','#DB161B'],90],
-      PG:[['#000','#CE1126','#FCD116'],135],
-      PY:[['#D52B1E','#fff','#0038A8'],180],
-      PE:[['#D91023','#fff','#D91023'],90],
-      PH:[['#0038A8','#CE1126','#FCD116'],135],
-      PL:[['#fff','#DC143C'],180],
-      PT:[['#006600','#FF0000'],90],
-      QA:[['#8D1B3D','#fff'],90],
-      RO:[['#002B7F','#FCD116','#CE1126'],90],
-      RU:[['#fff','#0039A6','#D52B1E'],180],
-      RW:[['#20603D','#FAD201','#1F75FE'],180],
-      KN:[['#009E60','#000','#FCD116','#CC0001'],135],
-      LC:[['#65CFFF','#000','#fff','#FCD116'],135],
-      VC:[['#009E60','#FCD116','#0076BD'],90],
-      WS:[['#CE1126','#fff','#002868'],90],
-      SM:[['#5EB6E4','#fff'],180],
-      ST:[['#12AD2B','#FFCE00','#D21034'],90],
-      SA:[['#006C35','#fff'],90],
-      SN:[['#00853F','#FDEF42','#E31B23'],90],
-      RS:[['#C6363C','#0C4076','#fff'],180],
-      SC:[['#003F87','#FCD856','#D62828','#fff','#007A5E'],135],
-      SL:[['#1EB53A','#fff','#0072C6'],180],
-      SG:[['#EF3340','#fff'],180],
-      SK:[['#fff','#0B4EA2','#EE1C25'],180],
-      SI:[['#fff','#003DA5','#CE2028'],180],
-      SB:[['#0120B6','#007138','#FCD116'],135],
-      SO:[['#4189DD','#fff'],90],
-      ZA:[['#007A4D','#000','#DE3831','#002395','#FFB81C','#fff'],135],
-      KR:[['#fff','#003478','#CD2E3A'],90],
-      SS:[['#078930','#fff','#000','#FCDD09'],180],
-      ES:[['#AA151B','#F1BF00','#AA151B'],180],
-      LK:[['#8D153A','#FF7722','#006B3F'],90],
-      SD:[['#D21034','#fff','#000'],180],
-      SR:[['#377E3F','#fff','#B40A2D'],180],
-      SE:[['#006AA7','#FECC02'],90],
-      CH:[['#FF0000','#fff'],90],
-      SY:[['#CE1126','#fff','#000'],180],
-      TJ:[['#CC0000','#fff','#006600'],180],
-      TZ:[['#1EB53A','#000','#FCD116','#009BDE'],135],
-      TH:[['#A51931','#fff','#2D2A4A','#fff','#A51931'],180],
-      TL:[['#DC241F','#000','#FFC726'],135],
-      TG:[['#006A4E','#FFCE00','#D21034'],180],
-      TO:[['#C10000','#fff'],90],
-      TT:[['#CE1126','#000','#fff'],135],
-      TN:[['#E70013','#fff'],90],
-      TR:[['#E30A17','#fff'],90],
-      TM:[['#1C9B48','#C8102E'],90],
-      TV:[['#009FCA','#fff','#CE1126'],90],
-      UG:[['#000','#FCDC04','#DE3008'],180],
-      UA:[['#005BBB','#FFD500'],180],
-      AE:[['#00732F','#fff','#000','#FF0000'],90],
-      GB:[['#CF142B','#fff','#012169'],135],
-      US:[['#B22234','#fff','#3C3B6E'],180],
-      UY:[['#fff','#5AAFD3'],180],
-      UZ:[['#1EB53A','#fff','#CE7722'],180],
-      VU:[['#009543','#D21034','#FFC61E'],135],
-      VA:[['#FFE000','#fff'],90],
-      VE:[['#FFD100','#003087','#CF142B'],180],
-      VN:[['#DA251D','#FFC300'],90],
-      YE:[['#CE1126','#fff','#000'],180],
-      ZM:[['#198A00','#EF7D00','#DE2010','#000'],180],
-      ZW:[['#006400','#FFD200','#D90000','#000'],180],
-      // Pride flag
+      AF:[['#000','#D32011','#007A36'],90],AL:[['#E41E20','#111'],90],DZ:[['#006233','#fff'],90],AD:[['#003DA5','#FEDF00','#C60B1E'],90],AO:[['#CC0000','#000'],180],AG:[['#000','#0072C6','#fff','#FCD116'],90],AR:[['#74ACDF','#fff','#74ACDF'],180],AM:[['#D90012','#0033A0','#F2A800'],180],AU:[['#00008B','#CC0000','#fff'],90],AT:[['#ED2939','#fff','#ED2939'],180],AZ:[['#0092BC','#ED2939','#3DB14B'],180],BS:[['#00778B','#000','#FFC72C'],135],BH:[['#CC0000','#fff'],90],BD:[['#006A4E','#F42A41'],90],BB:[['#00267F','#FFC726','#00267F'],90],BY:[['#CF101A','#009A00','#fff'],90],BE:[['#000','#FDDA24','#EF3340'],90],BZ:[['#003F87','#fff','#CE1126'],90],BJ:[['#008751','#FCD116','#DE2910'],90],BT:[['#FF8000','#FF0000'],135],BO:[['#D52B1E','#F4E400','#007A33'],180],BA:[['#002395','#FFCE00'],135],BW:[['#75AADB','#000','#fff'],180],BR:[['#009C3B','#FEDF00','#002776'],90],BN:[['#F7E017','#fff','#000'],135],BG:[['#fff','#00966E','#D62612'],180],BF:[['#EF2B2D','#009A00','#FCD116'],180],BI:[['#CE1126','#1EB53A','#fff'],135],CV:[['#003893','#fff','#CF2027'],180],KH:[['#032EA1','#E00025','#032EA1'],90],CM:[['#007A5E','#CE1126','#FCD116'],90],CA:[['#FF0000','#fff','#FF0000'],90],CF:[['#003082','#009A00','#FFCB00','#FF0000'],90],TD:[['#002664','#FECB00','#C60C30'],90],CL:[['#D52B1E','#fff','#0032A0'],180],CN:[['#DE2910','#FFDE00'],90],CO:[['#FCD116','#003087','#CE1126'],180],KM:[['#3A75C4','#fff','#FFC61E','#3D8948'],90],CG:[['#009543','#FBDE4A','#DC241F'],135],CD:[['#007FFF','#F7D618','#CE1021'],135],CR:[['#002B7F','#fff','#CF142B','#fff','#002B7F'],180],HR:[['#FF0000','#fff','#171796'],180],CU:[['#002A8F','#fff','#CF142B'],180],CY:[['#fff','#D47600'],90],CZ:[['#11457E','#fff','#D7141A'],180],DK:[['#C60C30','#fff'],90],DJ:[['#6AB2E7','#12AD2B','#D7141A'],135],DM:[['#006B3F','#000','#FDD000'],90],DO:[['#002D62','#CF142B','#fff'],90],EC:[['#FFD100','#003087','#CE1126'],180],EG:[['#CE1126','#fff','#000'],180],SV:[['#0F47AF','#fff','#0F47AF'],180],GQ:[['#3E9A00','#fff','#E32118'],180],ER:[['#4DAA4D','#4189DD','#D22027'],135],EE:[['#0072CE','#000','#fff'],180],SZ:[['#3E5EB9','#FFD900','#B10C0C'],180],ET:[['#078930','#FCDD09','#DA121A'],180],FJ:[['#68BFE5','#003087','#CF142B'],90],FI:[['#fff','#003580'],90],FR:[['#002395','#fff','#ED2939'],90],GA:[['#009e60','#FCD116','#3A75C4'],180],GM:[['#3A7728','#fff','#CE1126','#3D58A7'],180],GE:[['#fff','#DA0000'],90],DE:[['#000','#DE0000','#FFCE00'],180],GH:[['#CE1126','#FCD116','#006B3F'],180],GR:[['#0D5EAF','#fff'],180],GD:[['#CE1126','#FCD116','#009E60'],90],GT:[['#4997D0','#fff','#4997D0'],90],GN:[['#CE1126','#FCD116','#009460'],90],GW:[['#CE1126','#FCD116','#009E49'],90],GY:[['#009E60','#FCD116','#CE1126'],135],HT:[['#00209F','#D21034'],180],HN:[['#0073CF','#fff','#0073CF'],180],HU:[['#CE2939','#fff','#477050'],180],IS:[['#003897','#fff','#DC143C'],90],IN:[['#FF9933','#fff','#138808'],180],ID:[['#CE1126','#fff'],180],IR:[['#239F40','#fff','#DA0000'],180],IQ:[['#CE1126','#fff','#000'],180],IE:[['#169B62','#fff','#FF883E'],90],IL:[['#fff','#0038B8','#fff'],180],IT:[['#009246','#fff','#CE2B37'],90],JM:[['#3a3a3a','#FED100','#009B3A'],135],JP:[['#fff','#BC002D'],90],JO:[['#007A3D','#fff','#000','#CE1126'],180],KZ:[['#00AFCA','#FAE042'],90],KE:[['#000','#CC0001','#006600'],180],KI:[['#CE1126','#003087','#FCD116'],180],KW:[['#007A3D','#fff','#CE1126','#000'],90],KG:[['#E8112D','#FFD700'],90],LA:[['#CE1126','#002868','#CE1126'],180],LV:[['#9E3039','#fff','#9E3039'],180],LB:[['#fff','#CC2529','#fff'],180],LS:[['#009543','#fff','#003087'],90],LR:[['#BF0A30','#fff','#002868'],180],LY:[['#000','#fff','#239E46'],180],LI:[['#002B7F','#CE1126'],180],LT:[['#FDB913','#006A44','#C1272D'],180],LU:[['#EF3340','#fff','#00A3E0'],180],MG:[['#fff','#FC3D32','#007E3A'],90],MW:[['#000','#CE1126','#339E35'],180],MY:[['#CC0001','#fff','#010088'],180],MV:[['#D21034','#007E3A','#D21034'],90],ML:[['#14B53A','#FCD116','#CE1126'],90],MT:[['#fff','#CF142B'],90],MH:[['#003087','#fff','#E4001B'],135],MR:[['#006233','#D4AF37'],180],MU:[['#EA2839','#1A206D','#FFD500','#00A551'],180],MX:[['#006847','#fff','#CE1126'],90],FM:[['#75AADB','#fff'],90],MD:[['#003DA5','#FFD200','#CC0001'],90],MC:[['#CE1126','#fff'],180],MN:[['#C4272F','#015197','#C4272F'],90],ME:[['#D4AF37','#CC0001','#D4AF37'],90],MA:[['#C1272D','#006233'],90],MZ:[['#009A44','#FCE100','#000','#D21034'],135],MM:[['#FECB00','#34B233','#EA2839'],180],NA:[['#009BDE','#009A44','#EF7D00'],135],NR:[['#002B7F','#FFC61E'],180],NP:[['#003893','#DC143C','#fff'],90],NL:[['#AE1C28','#fff','#21468B'],180],NZ:[['#00247D','#CC142B','#fff'],90],NI:[['#fff','#3D6EAA','#fff'],180],NE:[['#E05206','#fff','#0DB02B'],180],NG:[['#008751','#fff','#008751'],90],KP:[['#024FA2','#fff','#BE0000'],180],MK:[['#CE2028','#F7E600'],90],NO:[['#EF2B2D','#fff','#002868'],90],OM:[['#DB161B','#fff','#008000'],90],PK:[['#01411C','#fff'],90],PW:[['#4AADD6','#FFDE00'],90],PA:[['#fff','#005293','#DB161B'],90],PG:[['#000','#CE1126','#FCD116'],135],PY:[['#D52B1E','#fff','#0038A8'],180],PE:[['#D91023','#fff','#D91023'],90],PH:[['#0038A8','#CE1126','#FCD116'],135],PL:[['#fff','#DC143C'],180],PT:[['#006600','#FF0000'],90],QA:[['#8D1B3D','#fff'],90],RO:[['#002B7F','#FCD116','#CE1126'],90],RU:[['#fff','#0039A6','#D52B1E'],180],RW:[['#20603D','#FAD201','#1F75FE'],180],KN:[['#009E60','#000','#FCD116','#CC0001'],135],LC:[['#65CFFF','#000','#fff','#FCD116'],135],VC:[['#009E60','#FCD116','#0076BD'],90],WS:[['#CE1126','#fff','#002868'],90],SM:[['#5EB6E4','#fff'],180],ST:[['#12AD2B','#FFCE00','#D21034'],90],SA:[['#006C35','#fff'],90],SN:[['#00853F','#FDEF42','#E31B23'],90],RS:[['#C6363C','#0C4076','#fff'],180],SC:[['#003F87','#FCD856','#D62828','#fff','#007A5E'],135],SL:[['#1EB53A','#fff','#0072C6'],180],SG:[['#EF3340','#fff'],180],SK:[['#fff','#0B4EA2','#EE1C25'],180],SI:[['#fff','#003DA5','#CE2028'],180],SB:[['#0120B6','#007138','#FCD116'],135],SO:[['#4189DD','#fff'],90],ZA:[['#007A4D','#000','#DE3831','#002395','#FFB81C','#fff'],135],KR:[['#fff','#003478','#CD2E3A'],90],SS:[['#078930','#fff','#000','#FCDD09'],180],ES:[['#AA151B','#F1BF00','#AA151B'],180],LK:[['#8D153A','#FF7722','#006B3F'],90],SD:[['#D21034','#fff','#000'],180],SR:[['#377E3F','#fff','#B40A2D'],180],SE:[['#006AA7','#FECC02'],90],CH:[['#FF0000','#fff'],90],SY:[['#CE1126','#fff','#000'],180],TJ:[['#CC0000','#fff','#006600'],180],TZ:[['#1EB53A','#000','#FCD116','#009BDE'],135],TH:[['#A51931','#fff','#2D2A4A','#fff','#A51931'],180],TL:[['#DC241F','#000','#FFC726'],135],TG:[['#006A4E','#FFCE00','#D21034'],180],TO:[['#C10000','#fff'],90],TT:[['#CE1126','#000','#fff'],135],TN:[['#E70013','#fff'],90],TR:[['#E30A17','#fff'],90],TM:[['#1C9B48','#C8102E'],90],TV:[['#009FCA','#fff','#CE1126'],90],UG:[['#000','#FCDC04','#DE3008'],180],UA:[['#005BBB','#FFD500'],180],AE:[['#00732F','#fff','#000','#FF0000'],90],GB:[['#CF142B','#fff','#012169'],135],US:[['#B22234','#fff','#3C3B6E'],180],UY:[['#fff','#5AAFD3'],180],UZ:[['#1EB53A','#fff','#CE7722'],180],VU:[['#009543','#D21034','#FFC61E'],135],VA:[['#FFE000','#fff'],90],VE:[['#FFD100','#003087','#CF142B'],180],VN:[['#DA251D','#FFC300'],90],YE:[['#CE1126','#fff','#000'],180],ZM:[['#198A00','#EF7D00','#DE2010','#000'],180],ZW:[['#006400','#FFD200','#D90000','#000'],180],
       PRIDE:[['#E40303','#FF8C00','#FFED00','#008026','#004DFF','#750787'],90],
     };
 
-    /* ── FLAG CANVAS ────────────────────────────────────────────────
-       Paints flag stripes clipped to the wordmark PNG shape.
-       Uses canvas compositing: draw gradient, then mask with wordmark alpha.
+    /* ── VOICE_COUNTRIES — complete code→display name for all FC entries ─
+       Used exclusively by pickMyFlag. Not in ambient rotation.
+       Add entries here whenever FC gets a new country.
     ──────────────────────────────────────────────────────────────── */
+    const VOICE_COUNTRIES = {
+      AF:'AFGHANISTAN',AL:'ALBANIA',DZ:'ALGERIA',AD:'ANDORRA',AO:'ANGOLA',
+      AG:'ANTIGUA & BARBUDA',AR:'ARGENTINA',AM:'ARMENIA',AU:'AUSTRALIA',
+      AT:'AUSTRIA',AZ:'AZERBAIJAN',BS:'BAHAMAS',BH:'BAHRAIN',BD:'BANGLADESH',
+      BB:'BARBADOS',BY:'BELARUS',BE:'BELGIUM',BZ:'BELIZE',BJ:'BENIN',
+      BT:'BHUTAN',BO:'BOLIVIA',BA:'BOSNIA',BW:'BOTSWANA',BR:'BRAZIL',
+      BN:'BRUNEI',BG:'BULGARIA',BF:'BURKINA FASO',BI:'BURUNDI',CV:'CAPE VERDE',
+      KH:'CAMBODIA',CM:'CAMEROON',CA:'CANADA',CF:'CENTRAL AFRICAN REP.',
+      TD:'CHAD',CL:'CHILE',CN:'CHINA',KM:'COMOROS',CG:'CONGO',
+      CD:'DR CONGO',CR:'COSTA RICA',HR:'CROATIA',CU:'CUBA',CY:'CYPRUS',
+      CZ:'CZECH REPUBLIC',DK:'DENMARK',DJ:'DJIBOUTI',DM:'DOMINICA',
+      DO:'DOMINICAN REP.',EC:'ECUADOR',EG:'EGYPT',SV:'EL SALVADOR',
+      GQ:'EQUATORIAL GUINEA',ER:'ERITREA',EE:'ESTONIA',SZ:'ESWATINI',
+      ET:'ETHIOPIA',FJ:'FIJI',FI:'FINLAND',FR:'FRANCE',GA:'GABON',
+      GM:'GAMBIA',GE:'GEORGIA',DE:'GERMANY',GH:'GHANA',GR:'GREECE',
+      GD:'GRENADA',GT:'GUATEMALA',GN:'GUINEA',GW:'GUINEA-BISSAU',
+      GY:'GUYANA',HT:'HAITI',HN:'HONDURAS',HU:'HUNGARY',IS:'ICELAND',
+      IN:'INDIA',ID:'INDONESIA',IR:'IRAN',IQ:'IRAQ',IE:'IRELAND',
+      IL:'ISRAEL',IT:'ITALY',JM:'JAMAICA',JP:'JAPAN',JO:'JORDAN',
+      KZ:'KAZAKHSTAN',KE:'KENYA',KI:'KIRIBATI',KW:'KUWAIT',KG:'KYRGYZSTAN',
+      LA:'LAOS',LV:'LATVIA',LB:'LEBANON',LS:'LESOTHO',LR:'LIBERIA',
+      LY:'LIBYA',LI:'LIECHTENSTEIN',LT:'LITHUANIA',LU:'LUXEMBOURG',
+      MG:'MADAGASCAR',MW:'MALAWI',MY:'MALAYSIA',MV:'MALDIVES',ML:'MALI',
+      MT:'MALTA',MH:'MARSHALL ISLANDS',MR:'MAURITANIA',MU:'MAURITIUS',
+      MX:'MEXICO',FM:'MICRONESIA',MD:'MOLDOVA',MC:'MONACO',MN:'MONGOLIA',
+      ME:'MONTENEGRO',MA:'MOROCCO',MZ:'MOZAMBIQUE',MM:'MYANMAR',NA:'NAMIBIA',
+      NR:'NAURU',NP:'NEPAL',NL:'NETHERLANDS',NZ:'NEW ZEALAND',NI:'NICARAGUA',
+      NE:'NIGER',NG:'NIGERIA',KP:'NORTH KOREA',MK:'NORTH MACEDONIA',
+      NO:'NORWAY',OM:'OMAN',PK:'PAKISTAN',PW:'PALAU',PA:'PANAMA',
+      PG:'PAPUA NEW GUINEA',PY:'PARAGUAY',PE:'PERU',PH:'PHILIPPINES',
+      PL:'POLAND',PT:'PORTUGAL',QA:'QATAR',RO:'ROMANIA',RU:'RUSSIA',
+      RW:'RWANDA',KN:'ST. KITTS & NEVIS',LC:'ST. LUCIA',VC:'ST. VINCENT',
+      WS:'SAMOA',SM:'SAN MARINO',ST:'SAO TOME',SA:'SAUDI ARABIA',
+      SN:'SENEGAL',RS:'SERBIA',SC:'SEYCHELLES',SL:'SIERRA LEONE',
+      SG:'SINGAPORE',SK:'SLOVAKIA',SI:'SLOVENIA',SB:'SOLOMON ISLANDS',
+      SO:'SOMALIA',ZA:'SOUTH AFRICA',KR:'SOUTH KOREA',SS:'SOUTH SUDAN',
+      ES:'SPAIN',LK:'SRI LANKA',SD:'SUDAN',SR:'SURINAME',SE:'SWEDEN',
+      CH:'SWITZERLAND',SY:'SYRIA',TJ:'TAJIKISTAN',TZ:'TANZANIA',
+      TH:'THAILAND',TL:'TIMOR-LESTE',TG:'TOGO',TO:'TONGA',
+      TT:'TRINIDAD & TOBAGO',TN:'TUNISIA',TR:'TURKEY',TM:'TURKMENISTAN',
+      TV:'TUVALU',UG:'UGANDA',UA:'UKRAINE',AE:'UAE',GB:'UNITED KINGDOM',
+      US:'UNITED STATES',UY:'URUGUAY',UZ:'UZBEKISTAN',VU:'VANUATU',
+      VA:'VATICAN',VE:'VENEZUELA',VN:'VIETNAM',YE:'YEMEN',ZM:'ZAMBIA',
+      ZW:'ZIMBABWE',PR:'PUERTO RICO',
+      PRIDE:'PRIDE · WE WELCOME EVERYONE',
+    };
+
+    /* ── FLAG CANVAS ──────────────────────────────────────────────── */
     function paintFlagCanvas(colors, angle) {
       const img    = document.getElementById('wordmarkImg');
       const canvas = document.getElementById('flagCanvas');
-
-      // Wait for image to be loaded
       if (!img.complete || !img.naturalWidth) {
         img.addEventListener('load', () => paintFlagCanvas(colors, angle), {once:true});
         return;
       }
-
       const nw = img.naturalWidth, nh = img.naturalHeight;
-      canvas.width  = nw;
-      canvas.height = nh;
-      // Match display size to img element display size
+      canvas.width  = nw; canvas.height = nh;
       canvas.style.width  = img.offsetWidth  + 'px';
       canvas.style.height = img.offsetHeight + 'px';
-
       const ctx = canvas.getContext('2d');
       ctx.clearRect(0, 0, nw, nh);
-
-      // Draw the flag gradient across the full canvas
       let grd;
-      if      (angle === 90)  grd = ctx.createLinearGradient(0, 0, nw, 0);   // L→R
-      else if (angle === 180) grd = ctx.createLinearGradient(0, 0, 0,  nh);  // T→B
-      else                    grd = ctx.createLinearGradient(0, nh, nw, 0);  // diagonal
-
+      if      (angle === 90)  grd = ctx.createLinearGradient(0, 0, nw, 0);
+      else if (angle === 180) grd = ctx.createLinearGradient(0, 0, 0,  nh);
+      else                    grd = ctx.createLinearGradient(0, nh, nw, 0);
       const n = colors.length;
       colors.forEach((c, i) => {
-        // Hard stripe edges
         grd.addColorStop( i / n,              c);
         grd.addColorStop((i + 1) / n - 0.001, c);
       });
-
       ctx.fillStyle = grd;
       ctx.fillRect(0, 0, nw, nh);
-
-      // Clip to wordmark shape: keep gradient only where wordmark has opacity
       ctx.globalCompositeOperation = 'destination-in';
       ctx.drawImage(img, 0, 0, nw, nh);
       ctx.globalCompositeOperation = 'source-over';
     }
 
-    /* ── CONSTANTS ──────────────────────────────────────────────── */
+    /* ── CONSTANTS ────────────────────────────────────────────────── */
     const BEAT_MS      = 4500;
     const NORMAL_BEATS = 5;
-    const FLAGS_HOLD   = 3; // hold flag colors for 3 beats (~13.5s)
+    const FLAGS_HOLD   = 4; // show 4 countries per ambient flag mode visit
 
+    /* ── SERVICE CALLOUTS for Box 1 ──────────────────────────────── */
+    const SERVICES = [
+      { name: 'THE CURL CUT',              sub: 'BESPOKE CUTTING FOR YOUR CURL TYPE' },
+      { name: 'HYDRATING DEEP TREATMENT',  sub: 'REPLENISH · STEAM · RESTORE' },
+      { name: 'HIGHLIGHTS & BALAYAGE',     sub: 'SUNKISSED TO PLATINUM' },
+      { name: 'SILK PRESS',                sub: 'SLEEK · SMOOTH · STILL YOU' },
+      { name: 'KERATIN TREATMENT',         sub: 'LOOSEN YOUR CURL · KEEP YOUR INTEGRITY' },
+      { name: 'FASHION COLOR',             sub: 'BOLD · INTENTIONAL · ICONIC' },
+      { name: 'KIDS CURL CUT',             sub: 'CURLS START HERE' },
+      { name: 'BOTANICAL HAIR GLOSS',      sub: 'SHINE WITHOUT COMPROMISE' },
+      { name: 'CURL-STRENGTHENING',        sub: 'STRONGER FROM THE INSIDE OUT' },
+      { name: 'STYLING WORKSHOP',          sub: 'LEARN YOUR CURLS' },
+    ];
+    // Intersperse legacy VIBES with services so the box stays dynamic
     const VIBES = ['ICONIC','FEARLESS','LUMINOUS','ELEVATED','RADIANT',
                    'LIMITLESS','ELECTRIC','EFFORTLESS','MAGNETIC','DIVINE',
                    'UNTAMED','NATURAL','POWERFUL','BOLD','GLOWING'];
@@ -781,25 +690,25 @@
       {from:20, to:24, mode:'invert',   msg:"Evening — INVERTED for drama?"},
     ];
 
-    /* ── STATE ──────────────────────────────────────────────────── */
+    /* ── STATE ────────────────────────────────────────────────────── */
     let currentMode  = 'normal';
     let beatCount    = 0;
     let specialIndex = 0;
     let vibeIndex    = 0;
+    let serviceIndex = 0;
     let countryIndex = 0;
     let beatTimer    = null;
     let pendingSugg  = null;
     let flipHeld     = false;
     let flagTimer    = null;
-    let flagsHeld    = 0; // counts beats flags has been shown
+    let flagsHeld    = 0;
+    let vibeOrService = 0; // alternates: 0=service, 1=vibe word
 
-    /* ── CLOCK + DATE + WEATHER CYCLE ──────────────────────────── */
+    /* ── CLOCK + DATE + WEATHER CYCLE ────────────────────────────── */
     const DAYS   = ['SUN','MON','TUE','WED','THU','FRI','SAT'];
     const MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-
     let weatherTemp = null;
     let weatherDesc = null;
-
     const WMO = {
       0:'CLEAR',1:'MOSTLY CLEAR',2:'PARTLY CLOUDY',3:'OVERCAST',
       45:'FOGGY',48:'FOGGY',
@@ -810,9 +719,7 @@
       85:'SNOW SHOWERS',86:'SNOW SHOWERS',
       95:'STORMY',96:'STORMY',99:'STORMY'
     };
-
     function fetchWeather() {
-      // Paramus, NJ
       fetch('https://api.open-meteo.com/v1/forecast?latitude=40.9459&longitude=-74.0714&current=temperature_2m,weather_code&temperature_unit=fahrenheit&wind_speed_unit=mph')
         .then(r => r.json())
         .then(d => {
@@ -822,7 +729,7 @@
         .catch(() => {});
     }
     fetchWeather();
-    setInterval(fetchWeather, 10 * 60 * 1000); // refresh every 10 min
+    setInterval(fetchWeather, 10 * 60 * 1000);
 
     function getTimeStr() {
       const now = new Date();
@@ -834,15 +741,12 @@
       return `${DAYS[now.getDay()]} ${MONTHS[now.getMonth()]} ${String(now.getDate()).padStart(2,'0')}`;
     }
 
-    // Cycle state: 0=time, 1=date, 2=weather
     let infoState = 0;
-
     function setInfoPanel(state, animate) {
       const ticket = document.getElementById('infoTicket');
       const label  = document.getElementById('infoLabel');
       const value  = document.getElementById('infoValue');
       const sub    = document.getElementById('infoSub');
-
       function apply() {
         if (state === 0) {
           label.textContent = '\u00a0';
@@ -861,46 +765,64 @@
           sub.textContent = weatherDesc || 'LOADING';
         }
       }
-
       if (animate) {
         ticket.classList.add('fading');
         setTimeout(() => { apply(); ticket.classList.remove('fading'); }, 420);
-      } else {
-        apply();
-      }
+      } else { apply(); }
     }
-
-    // Keep time live when time panel is showing
-    setInterval(() => {
-      if (infoState === 0) setInfoPanel(0, false);
-    }, 1000);
-
-    // Cycle in sync with the main beat (4500ms)
-    setInterval(() => {
-      infoState = (infoState + 1) % 3;
-      setInfoPanel(infoState, true);
-    }, BEAT_MS);
-
-    // Initial render
+    setInterval(() => { if (infoState === 0) setInfoPanel(0, false); }, 1000);
+    setInterval(() => { infoState = (infoState + 1) % 3; setInfoPanel(infoState, true); }, BEAT_MS);
     setInfoPanel(0, false);
-
     document.addEventListener('visibilitychange', () => { if(!document.hidden) setInfoPanel(infoState, false); });
     window.addEventListener('focus', () => setInfoPanel(infoState, false));
 
-    /* ── VIBE ───────────────────────────────────────────────────── */
-    function updateVibe() {
-      vibeIndex = (vibeIndex+1) % VIBES.length;
+    /* ── BOX 1: AUTO-SIZE long service names ─────────────────────── */
+    function autoSizeVibe() {
       const el = document.getElementById('panelVibe');
-      el.innerHTML = '';
-      [...VIBES[vibeIndex]].forEach((ch,i) => {
-        const s = document.createElement('span');
-        s.className = 'flap-char'; s.textContent = ch;
-        s.style.animationDelay = `${i*50}ms`;
-        el.appendChild(s);
-      });
+      const text = el.textContent || '';
+      // Scale down progressively based on character count
+      if (text.length > 22)      el.style.fontSize = '0.82vw';
+      else if (text.length > 16) el.style.fontSize = '0.92vw';
+      else                       el.style.fontSize = '1.05vw';
     }
+    function updateVibe() {
+      const ticket = document.getElementById('vibeTicket');
+      const labelEl = document.getElementById('panelLabel');
+      const vibeEl  = document.getElementById('panelVibe');
+      const subEl   = document.getElementById('panelSub');
 
-    /* ── FLAG CANVAS MODE ───────────────────────────────────────── */
+      ticket.classList.add('fading');
+      setTimeout(() => {
+        // Alternate: show a service callout every other beat, vibe word in between
+        if (vibeOrService === 0) {
+          const svc = SERVICES[serviceIndex % SERVICES.length];
+          serviceIndex++;
+          labelEl.textContent = 'FEATURED SERVICE';
+          vibeEl.textContent  = svc.name;
+          subEl.textContent   = svc.sub;
+          autoSizeVibe();
+        } else {
+          vibeIndex = (vibeIndex + 1) % VIBES.length;
+          labelEl.textContent = 'TODAY\'S LOOK IS';
+          vibeEl.innerHTML = '';
+          [...VIBES[vibeIndex]].forEach((ch, i) => {
+            const s = document.createElement('span');
+            s.className = 'flap-char'; s.textContent = ch;
+            s.style.animationDelay = `${i * 50}ms`;
+            vibeEl.appendChild(s);
+          });
+          subEl.textContent = '\u00a0';
+          autoSizeVibe();
+        }
+        vibeOrService = vibeOrService === 0 ? 1 : 0;
+        ticket.classList.remove('fading');
+      }, 420);
+    }
+    // Kick off the first service update after a short delay
+    setTimeout(updateVibe, BEAT_MS);
+    setInterval(updateVibe, BEAT_MS * 2);
+
+    /* ── FLAG CANVAS MODE ─────────────────────────────────────────── */
     function showFlagColors() {
       const c   = COUNTRIES[countryIndex];
       const def = [['#a3c6ba','#f6eee0'], 90];
@@ -909,19 +831,22 @@
       document.getElementById('flagCountryLabel').textContent = c.name;
     }
 
-    /* ── MODE SWITCHER ──────────────────────────────────────────── */
+    /* ── MODE SWITCHER ────────────────────────────────────────────── */
     function setMode(mode) {
       const all = ['normal','flags','ghost','electric','bounce','glitch',
                    'pulse','flip','flip-held','invert','chrome'];
       document.body.classList.remove(...all.map(m=>`mode-${m}`));
-      clearTimeout(flagTimer);
-
+      clearInterval(flagTimer);
       if (mode === 'flags') {
         document.body.classList.add('mode-flags');
         showFlagColors();
-        flagTimer = setTimeout(() => { countryIndex = (countryIndex+1) % COUNTRIES.length; }, BEAT_MS-500);
+        // Do NOT start a repeating interval — one country per visit.
+        // countryIndex advances in the sequencer tick when flag mode exits.
       } else if (mode === 'flip') {
         flipHeld = false;
+        // Clear flag canvas on any non-flag mode
+        const fc = document.getElementById('flagCanvas');
+        fc.getContext('2d').clearRect(0, 0, fc.width, fc.height);
         document.body.classList.add('mode-flip');
         setTimeout(() => {
           document.body.classList.remove('mode-flip');
@@ -930,26 +855,28 @@
         }, 1100);
       } else {
         flipHeld = false;
+        // Clear flag canvas when leaving flag mode for any other mode
+        const fc = document.getElementById('flagCanvas');
+        fc.getContext('2d').clearRect(0, 0, fc.width, fc.height);
         document.body.classList.add(`mode-${mode}`);
       }
-
       currentMode = mode;
       document.getElementById('modeLabel').textContent = MODE_LABELS[mode] || mode.toUpperCase();
       document.getElementById('modeDot').classList.toggle('pulse-dot', mode === 'normal');
     }
 
-    /* ── SEQUENCER ──────────────────────────────────────────────── */
+    /* ── SEQUENCER ────────────────────────────────────────────────── */
     function tick() {
-      // If flags is active, hold it for FLAGS_HOLD beats before moving on
       if (currentMode === 'flags') {
         flagsHeld++;
-        if (flagsHeld < FLAGS_HOLD) return; // stay in flags mode
+        if (flagsHeld < FLAGS_HOLD) return;
+        // Flag mode visit complete — advance to next country for next visit
+        countryIndex = (countryIndex + 1) % COUNTRIES.length;
         flagsHeld = 0;
         beatCount = 0;
         setMode('normal');
         return;
       }
-
       beatCount++;
       if (beatCount <= NORMAL_BEATS) {
         if (currentMode !== 'normal' && !flipHeld) setMode('normal');
@@ -959,13 +886,15 @@
         beatCount = 0;
         flagsHeld = 0;
         setMode(next);
-        updateVibe();
       }
     }
     function startSeq() { beatTimer = setInterval(tick, BEAT_MS); }
+    // Always start clean — remove any stale mode classes before first tick
+    document.body.className = 'mode-normal';
+    flipHeld = false;
     startSeq();
 
-    /* ── TOAST ──────────────────────────────────────────────────── */
+    /* ── TOAST ────────────────────────────────────────────────────── */
     let vfbTimer = null;
     function showToast(msg, ms=2800) {
       const el = document.getElementById('vfb');
@@ -974,7 +903,7 @@
       vfbTimer = setTimeout(()=>el.classList.remove('show'), ms);
     }
 
-    /* ── SUGGESTION ─────────────────────────────────────────────── */
+    /* ── SUGGESTION ───────────────────────────────────────────────── */
     function getSugg() {
       const h = new Date().getHours();
       return TIME_SUGGESTIONS.find(s=>h>=s.from&&h<s.to) || TIME_SUGGESTIONS[5];
@@ -1000,7 +929,198 @@
     }
     setInterval(()=>{ if(!document.getElementById('suggOverlay').classList.contains('show')) showSugg(getSugg()); }, 8*60*1000);
 
-    /* ── JUMP ───────────────────────────────────────────────────── */
+    /* ── PICK MY FLAG — voice-triggered personal flag moment ─────────
+       Maps spoken country name keywords to COUNTRIES array codes.
+       KG says "show Jamaica" or a client says "Trinidad" and the
+       wordmark lights up in their colors for ~27 seconds (6 beats).
+    ──────────────────────────────────────────────────────────────── */
+    const FLAG_VOICE_MAP = {
+      // Caribbean — heavy rotation
+      jamaica:'JM', jamaican:'JM',
+      trinidad:'TT', tobago:'TT', trinidadian:'TT',
+      barbados:'BB', bajan:'BB', barbadian:'BB',
+      haiti:'HT', haitian:'HT',
+      grenada:'GD', grenadian:'GD',
+      dominica:'DM', dominican:'DO', 'dominican republic':'DO',
+      antigua:'AG',
+      'st lucia':'LC', lucia:'LC',
+      'st vincent':'VC', vincent:'VC',
+      'st kitts':'KN', kitts:'KN', nevis:'KN',
+      bahamas:'BS', bahamian:'BS',
+      cuba:'CU', cuban:'CU',
+      // Latin America
+      mexico:'MX', mexican:'MX',
+      colombia:'CO', colombian:'CO',
+      'puerto rico':'PR', puerto:'PR',
+      panama:'PA', panamanian:'PA',
+      'costa rica':'CR',
+      brazil:'BR', brazilian:'BR',
+      venezuela:'VE', venezuelan:'VE',
+      ecuador:'EC', ecuadorian:'EC',
+      peru:'PE', peruvian:'PE',
+      chile:'CL', chilean:'CL',
+      argentina:'AR', argentinian:'AR',
+      uruguay:'UY', uruguayan:'UY',
+      paraguay:'PY', paraguayan:'PY',
+      bolivia:'BO', bolivian:'BO',
+      guyana:'GY', guyanese:'GY',
+      suriname:'SR', surinamese:'SR',
+      guatemala:'GT', guatemalan:'GT',
+      honduras:'HN', honduran:'HN',
+      'el salvador':'SV', salvador:'SV', salvadoran:'SV',
+      nicaragua:'NI', nicaraguan:'NI',
+      // North America
+      canada:'CA', canadian:'CA',
+      'united states':'US', 'united state':'US', america:'US', american:'US', usa:'US', 'u s a':'US',
+      // Africa
+      nigeria:'NG', nigerian:'NG',
+      ghana:'GH', ghanaian:'GH',
+      kenya:'KE', kenyan:'KE',
+      ethiopia:'ET', ethiopian:'ET',
+      senegal:'SN', senegalese:'SN',
+      cameroon:'CM', cameroonian:'CM',
+      'south africa':'ZA', 'south african':'ZA',
+      tanzania:'TZ', tanzanian:'TZ',
+      uganda:'UG', ugandan:'UG',
+      rwanda:'RW', rwandan:'RW',
+      chad:'TD', chadian:'TD',
+      mali:'ML', malian:'ML',
+      niger:'NE', nigerien:'NE',
+      togo:'TG', togolese:'TG',
+      benin:'BJ', beninese:'BJ',
+      'burkina faso':'BF', burkinabe:'BF',
+      'ivory coast':'CI', 'cote divoire':'CI',
+      'sierra leone':'SL',
+      liberia:'LR', liberian:'LR',
+      gabon:'GA', gabonese:'GA',
+      angola:'AO', angolan:'AO',
+      mozambique:'MZ', mozambican:'MZ',
+      zambia:'ZM', zambian:'ZM',
+      zimbabwe:'ZW', zimbabwean:'ZW',
+      malawi:'MW', malawian:'MW',
+      botswana:'BW', motswana:'BW',
+      namibia:'NA', namibian:'NA',
+      madagascar:'MG', malagasy:'MG',
+      'south sudan':'SS',
+      sudan:'SD', sudanese:'SD',
+      somalia:'SO', somali:'SO',
+      djibouti:'DJ', djiboutian:'DJ',
+      eritrea:'ER', eritrean:'ER',
+      egypt:'EG', egyptian:'EG',
+      morocco:'MA', moroccan:'MA',
+      algeria:'DZ', algerian:'DZ',
+      tunisia:'TN', tunisian:'TN',
+      libya:'LY', libyan:'LY',
+      // Europe
+      france:'FR', french:'FR',
+      germany:'DE', german:'DE',
+      italy:'IT', italian:'IT',
+      spain:'ES', spanish:'ES',
+      portugal:'PT', portuguese:'PT',
+      'united kingdom':'GB', britain:'GB', british:'GB', england:'GB', uk:'GB',
+      ireland:'IE', irish:'IE',
+      netherlands:'NL', dutch:'NL', holland:'NL',
+      belgium:'BE', belgian:'BE',
+      switzerland:'CH', swiss:'CH',
+      austria:'AT', austrian:'AT',
+      poland:'PL', polish:'PL',
+      ukraine:'UA', ukrainian:'UA',
+      russia:'RU', russian:'RU',
+      sweden:'SE', swedish:'SE',
+      norway:'NO', norwegian:'NO',
+      denmark:'DK', danish:'DK',
+      finland:'FI', finnish:'FI',
+      greece:'GR', greek:'GR',
+      romania:'RO', romanian:'RO',
+      hungary:'HU', hungarian:'HU',
+      'czech republic':'CZ', czech:'CZ',
+      slovakia:'SK', slovak:'SK',
+      croatia:'HR', croatian:'HR',
+      serbia:'RS', serbian:'RS',
+      bulgaria:'BG', bulgarian:'BG',
+      // Asia & Pacific
+      china:'CN', chinese:'CN',
+      japan:'JP', japanese:'JP',
+      india:'IN', indian:'IN',
+      philippines:'PH', filipino:'PH', filipina:'PH',
+      indonesia:'ID', indonesian:'ID',
+      vietnam:'VN', vietnamese:'VN',
+      thailand:'TH', thai:'TH',
+      'south korea':'KR', korea:'KR', korean:'KR',
+      'north korea':'KP',
+      pakistan:'PK', pakistani:'PK',
+      bangladesh:'BD', bangladeshi:'BD',
+      'sri lanka':'LK', sri:'LK',
+      nepal:'NP', nepali:'NP',
+      myanmar:'MM', burmese:'MM',
+      cambodia:'KH', cambodian:'KH',
+      malaysia:'MY', malaysian:'MY',
+      singapore:'SG', singaporean:'SG',
+      australia:'AU', australian:'AU',
+      'new zealand':'NZ',
+      fiji:'FJ', fijian:'FJ',
+      // Middle East
+      'saudi arabia':'SA', saudi:'SA',
+      uae:'AE', emirates:'AE', 'united arab emirates':'AE',
+      israel:'IL', israeli:'IL',
+      jordan:'JO', jordanian:'JO',
+      lebanon:'LB', lebanese:'LB',
+      iraq:'IQ', iraqi:'IQ',
+      iran:'IR', iranian:'IR',
+      turkey:'TR', turkish:'TR',
+      qatar:'QA', qatari:'QA',
+      kuwait:'KW', kuwaiti:'KW',
+      // Pride
+      pride:'PRIDE', rainbow:'PRIDE', lgbtq:'PRIDE',
+    };
+
+    function pickMyFlag(transcript) {
+      const t = transcript.toLowerCase();
+      const keys = Object.keys(FLAG_VOICE_MAP).sort((a,b) => b.length - a.length);
+      for (const key of keys) {
+        if (t.includes(key)) {
+          const code = FLAG_VOICE_MAP[key];
+          // Get display name from VOICE_COUNTRIES (covers all FC entries)
+          const displayName = VOICE_COUNTRIES[code];
+          if (!displayName || !FC[code]) return false;
+          // For ambient countries already in COUNTRIES array, use their index
+          // For voice-only countries, just paint directly without advancing countryIndex
+          const ambientIdx = COUNTRIES.findIndex(c => c.code === code);
+          // Jump into flag mode for 6 beats (~27s) then return
+          clearInterval(beatTimer);
+          clearInterval(flagTimer);
+          // Paint the flag directly
+          document.body.classList.remove(...['normal','flags','ghost','electric','bounce','glitch',
+            'pulse','flip','flip-held','invert','chrome'].map(m=>`mode-${m}`));
+          document.body.classList.add('mode-flags');
+          currentMode = 'flags';
+          document.getElementById('modeLabel').textContent = 'FLAG MODE';
+          document.getElementById('modeDot').classList.remove('pulse-dot');
+          const [colors, angle] = FC[code];
+          paintFlagCanvas(colors, angle);
+          document.getElementById('flagCountryLabel').textContent = displayName;
+          showToast(`✦ ${displayName}`, 3500);
+          // Hold for 6 beats then return to normal
+          let personalBeats = 0;
+          const personalTimer = setInterval(() => {
+            personalBeats++;
+            if (personalBeats < 6) {
+              // Keep painting same flag
+              paintFlagCanvas(colors, angle);
+              document.getElementById('flagCountryLabel').textContent = displayName;
+            } else {
+              clearInterval(personalTimer);
+              clearInterval(flagTimer);
+              beatCount = 0;
+              setMode('normal');
+              startSeq();
+            }
+          }, BEAT_MS);
+          return true;
+        }
+      }
+      return false;
+    }
     function jumpMode(mode) {
       clearInterval(beatTimer);
       setMode(mode);
@@ -1008,7 +1128,7 @@
       setTimeout(()=>{ beatCount=0; setMode('normal'); startSeq(); }, 8000);
     }
 
-    /* ── VOICE ──────────────────────────────────────────────────── */
+    /* ── VOICE ────────────────────────────────────────────────────── */
     const COMMANDS = [
       {words:['electric','neon','lightning'],        action:()=>jumpMode('electric')},
       {words:['ghost','transparent','invisible'],    action:()=>jumpMode('ghost')},
@@ -1030,15 +1150,33 @@
       t = t.toLowerCase();
       document.getElementById('voiceLabel').textContent = `"${t.slice(0,22).toUpperCase()}"`;
       setTimeout(()=>{ document.getElementById('voiceLabel').textContent='LISTENING...'; }, 3000);
+      // Try Pick My Flag first — country name takes priority
+      if (pickMyFlag(t)) return;
       for (const cmd of COMMANDS)
         if (cmd.words.some(w=>t.includes(w))) { cmd.action(); return; }
-      showToast('Try: ghost · electric · flags · bounce · flip · next');
+      showToast('Try: ghost · electric · flags · bounce · flip · next · or say a country name');
     }
 
     let recognition = null;
+    let voiceStarted = false;
+
+    function disableVoice() {
+      if (recognition) { try { recognition.abort(); } catch(e){} recognition = null; }
+      voiceStarted = false;
+      document.getElementById('voiceZone').classList.remove('voice-listening');
+      document.getElementById('voiceLabel').textContent = 'CLICK TO ENABLE VOICE';
+    }
+
     function initVoice() {
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if (!SR) { document.getElementById('voiceLabel').textContent='NO MIC SUPPORT'; return; }
+      // Detect file:// protocol — mic blocked by browser security policy
+      if (window.location.protocol === 'file:') {
+        document.getElementById('voiceLabel').textContent='VOICE: OPEN VIA HTTPS';
+        showToast('Voice requires HTTPS — use the live URL', 5000);
+        voiceStarted = false;
+        return;
+      }
       recognition = new SR();
       recognition.continuous=true; recognition.interimResults=false; recognition.lang='en-US';
       recognition.onstart = ()=>{
@@ -1049,14 +1187,36 @@
         const r=e.results[e.results.length-1];
         if(r.isFinal) handleVoice(r[0].transcript.trim());
       };
-      recognition.onerror = e=>{ if(e.error!=='no-speech') document.getElementById('voiceLabel').textContent='MIC ERROR'; };
-      recognition.onend = ()=>setTimeout(()=>{ try{recognition.start();}catch(e){} }, 500);
-      try { recognition.start(); } catch(e) {}
+      recognition.onerror = e=>{
+        if (e.error === 'not-allowed' || e.error === 'service-not-allowed') {
+          document.getElementById('voiceLabel').textContent='MIC BLOCKED — CHECK BROWSER';
+          voiceStarted = false;
+        } else if (e.error !== 'no-speech') {
+          document.getElementById('voiceLabel').textContent='MIC ERROR — TAP TO RETRY';
+          voiceStarted = false;
+        }
+      };
+      // Only restart if still intentionally active
+      recognition.onend = ()=>{
+        if (voiceStarted) setTimeout(()=>{ try{ recognition.start(); }catch(e){} }, 500);
+      };
+      try { recognition.start(); } catch(e) {
+        document.getElementById('voiceLabel').textContent='MIC ERROR — TAP TO RETRY';
+        voiceStarted = false;
+      }
     }
-    let voiceStarted = false;
-    function enableVoice() { if(!voiceStarted){ voiceStarted=true; initVoice(); } }
 
-    /* ── KEYBOARD ───────────────────────────────────────────────── */
+    function enableVoice() {
+      if (!voiceStarted) {
+        voiceStarted = true;
+        initVoice();
+      } else {
+        // Second tap disables voice
+        disableVoice();
+      }
+    }
+
+    /* ── KEYBOARD ─────────────────────────────────────────────────── */
     document.addEventListener('keydown', e=>{
       const map = {
         'e':'electric','g':'ghost','b':'bounce','x':'glitch','p':'pulse',
@@ -1067,60 +1227,79 @@
       if(typeof a==='function') a(); else if(typeof a==='string') jumpMode(a);
     });
 
-    /* ── FULLSCREEN ─────────────────────────────────────────────── */
+    /* ── FULLSCREEN — double-click only, never auto ───────────────── */
     document.addEventListener('dblclick', ()=>{
       document.fullscreenElement
         ? document.exitFullscreen().catch(()=>{})
         : document.documentElement.requestFullscreen().catch(()=>{});
     });
-    setTimeout(()=>document.documentElement.requestFullscreen().catch(()=>{}), 1500);
 
-    /* ── BOX 3: CONTACT CYCLE (insta ↔ phone) ──────────────────── */
+    /* ── BOX 3: CONTACT CYCLE (insta → phone → creds) ────────────── */
     let contactState = 0;
     function cycleContact() {
-      const insta = document.getElementById('contactInsta');
-      const phone = document.getElementById('contactPhone');
-      contactState = contactState === 0 ? 1 : 0;
-      if (contactState === 0) {
-        insta.style.display = 'flex';
-        phone.style.display = 'none';
-      } else {
-        insta.style.display = 'none';
-        phone.style.display = 'block';
-      }
+      const insta  = document.getElementById('contactInsta');
+      const phone  = document.getElementById('contactPhone');
+      const creds  = document.getElementById('contactCreds');
+      contactState = (contactState + 1) % 3;
+      insta.style.display  = contactState === 0 ? 'flex'  : 'none';
+      phone.style.display  = contactState === 1 ? 'block' : 'none';
+      creds.style.display  = contactState === 2 ? 'block' : 'none';
     }
-    setInterval(cycleContact, BEAT_MS * 2); // every 2 beats so it's not too jumpy
+    setInterval(cycleContact, BEAT_MS * 2);
 
-    /* ── BOX 4: BOOK CYCLE (QR ↔ URL) ──────────────────────────── */
+    /* ── BOX 4: BOOK CYCLE (QR → URL → HOURS) ────────────────────── */
     let bookState = 0;
+    const BOOK_LABELS = ['SCAN TO BOOK', 'BOOK ONLINE', ''];
     function cycleBook() {
-      const qr  = document.getElementById('bookQR');
-      const url = document.getElementById('bookURL');
-      bookState = bookState === 0 ? 1 : 0;
-      if (bookState === 0) {
-        qr.style.display  = 'flex';
-        url.style.display = 'none';
-      } else {
-        qr.style.display  = 'none';
-        url.style.display = 'block';
-      }
+      const qr    = document.getElementById('bookQR');
+      const url   = document.getElementById('bookURL');
+      const hours = document.getElementById('bookHours');
+      const label = document.getElementById('bookLabel');
+      bookState = (bookState + 1) % 3;
+      qr.style.display    = bookState === 0 ? 'flex'  : 'none';
+      url.style.display   = bookState === 1 ? 'block' : 'none';
+      hours.style.display = bookState === 2 ? 'block' : 'none';
+      label.textContent   = BOOK_LABELS[bookState];
     }
     setInterval(cycleBook, BEAT_MS * 2);
 
-    /* ── QR CODE ────────────────────────────────────────────────── */
-    // Render after DOM is ready (it already is at this point)
+    /* ── TICKER: pause on special segment ────────────────────────── */
+    (function tickerPauseOnSpecial() {
+      const ticker = document.getElementById('tickerInner');
+      const special = ticker.querySelector('.ticker-special');
+      if (!special) return;
+
+      // Use IntersectionObserver to detect when special segment is near center
+      // Fallback: use a timed pause approach synced to ticker duration
+      // Ticker duration = 160s, full content = roughly 160s to scroll
+      // We inject a pause by temporarily pausing animation when special is visible
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            // Pause ticker for 2 seconds
+            ticker.style.animationPlayState = 'paused';
+            setTimeout(() => {
+              ticker.style.animationPlayState = 'running';
+            }, 2000);
+          }
+        });
+      }, { threshold: 0.5 });
+
+      observer.observe(special);
+    })();
+
+    /* ── QR CODE ──────────────────────────────────────────────────── */
     (function initQR() {
       try {
         new QRCode(document.getElementById('qrcode'), {
           text:         'https://iconicurls.glossgenius.com',
           width:        80,
           height:       80,
-          colorDark:    '#f6eee0',   // cream — the QR pattern
-          colorLight:   '#13150f',   // dark — the background
+          colorDark:    '#f6eee0',
+          colorLight:   '#13150f',
           correctLevel: QRCode.CorrectLevel.M
         });
       } catch(e) {
-        // If library not loaded yet, try on window load
         window.addEventListener('load', initQR);
       }
     })();
